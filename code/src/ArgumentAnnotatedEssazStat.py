@@ -165,3 +165,16 @@ def printAverageNoOfMajorClaimsClaimsPremisesTokens():
 
 
 printAverageNoOfMajorClaimsClaimsPremisesTokens()
+print('-' * 100)
+
+
+# The 10 most specific words in major claims, claims, and premises.
+def printSpecificWordsInMajorClaimsClaimsPremises():
+    allMajorClaimsTokens = getAllMajorClaimsTokens()
+    allClaimsTokens = getAllMajorClaimsTokens()
+    allPremisesTokens = getAllPremisesTokens()
+    print("10 most specific words in major claims, claims, and premises =  logic needs to be implemented")
+
+
+printSpecificWordsInMajorClaimsClaimsPremises()
+print('-' * 100)
