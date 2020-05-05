@@ -172,9 +172,9 @@ print('-' * 100)
 
 # The 10 most specific words in major claims, claims, and premises.
 def printSpecificWordsInMajorClaimsClaimsPremises():
-    allMajorClaimsTokens = removePunctAndStopWords(getAllMajorClaimsTokens())
-    allClaimsTokens = removePunctAndStopWords(getAllClaimsTokens())
-    allPremisesTokens = removePunctAndStopWords(getAllPremisesTokens())
+    allMajorClaimsTokens = list(set(removePunctAndStopWords(getAllMajorClaimsTokens())))
+    allClaimsTokens = list(set(removePunctAndStopWords(getAllClaimsTokens())))
+    allPremisesTokens = list(set(removePunctAndStopWords(getAllPremisesTokens())))
 
     # Calculating most specific words for Major Claims
     allMajorClaimsTokensMod = allMajorClaimsTokens
@@ -183,8 +183,8 @@ def printSpecificWordsInMajorClaimsClaimsPremises():
             allMajorClaimsTokensMod.remove(word)
 
     specificWordsMajorClaims = []
-    for word in Counter(allMajorClaimsTokensMod).most_common(10):
-        specificWordsMajorClaims.append(word[0])
+    for word1 in Counter(allMajorClaimsTokensMod).most_common(10):
+        specificWordsMajorClaims.append(word1[0])
 
     # Calculating most specific words for Major Claims
     allClaimsTokensMod = allClaimsTokens
@@ -193,8 +193,8 @@ def printSpecificWordsInMajorClaimsClaimsPremises():
             allClaimsTokensMod.remove(word)
 
     specificWordsClaims = []
-    for word in Counter(allClaimsTokensMod).most_common(10):
-        specificWordsClaims.append(word[0])
+    for word1 in Counter(allClaimsTokensMod).most_common(10):
+        specificWordsClaims.append(word1[0])
 
     # Calculating most specific words for Major Claims
     allPremisesTokensMod = allPremisesTokens
@@ -203,8 +203,8 @@ def printSpecificWordsInMajorClaimsClaimsPremises():
             allPremisesTokensMod.remove(word)
 
     specificWordsPremises = []
-    for word in Counter(allPremisesTokensMod).most_common(10):
-        specificWordsPremises.append(word[0])
+    for word1 in Counter(allPremisesTokensMod).most_common(10):
+        specificWordsPremises.append(word1[0])
 
     print("10 most specific words in major claims:",specificWordsMajorClaims)
     print("10 most specific words in claims:",specificWordsClaims)
