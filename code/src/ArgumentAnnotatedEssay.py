@@ -1,5 +1,8 @@
 import json
 import csv
+from PropFile import *
+
+print(Flag)
 
 finaloutput=[]
 filename=[]
@@ -10,7 +13,7 @@ def getId(input):
     with open('../data/train-test-split.csv') as csvfile:
         spamreader = list(csv.reader(csvfile, delimiter=";"))
     for row in spamreader:
-        if row[1] == "TRAIN":
+        if row[1] == "TRAIN" and Flag==1:
             essayobject = {}
             essayobject["id"] = int(str(row[0]).replace("essay",""))
             fileid.append(int(str(row[0]).replace("essay","")))
@@ -18,6 +21,23 @@ def getId(input):
             essayobject["paragraphs"]=paragraphobject
             filename.append(row[0])
             finaloutput.append(essayobject)
+        elif row[1] == "TEST" and Flag==2:
+                essayobject = {}
+                essayobject["id"] = int(str(row[0]).replace("essay", ""))
+                fileid.append(int(str(row[0]).replace("essay", "")))
+                paragraphobject = []
+                essayobject["paragraphs"] = paragraphobject
+                filename.append(row[0])
+                finaloutput.append(essayobject)
+        elif Flag==3 and (row[1] == "TEST" or row[1] == "TRAIN"):
+            essayobject = {}
+            essayobject["id"] = int(str(row[0]).replace("essay", ""))
+            fileid.append(int(str(row[0]).replace("essay", "")))
+            paragraphobject = []
+            essayobject["paragraphs"] = paragraphobject
+            filename.append(row[0])
+            finaloutput.append(essayobject)
+
 
 def getText(input1,input2):
     spamreader = []

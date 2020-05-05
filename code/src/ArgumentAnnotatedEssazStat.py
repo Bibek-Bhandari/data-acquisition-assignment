@@ -11,7 +11,7 @@ nlp = spacy.load("en_core_web_sm")
 
 def getJSonObject():
     essayStringList = ''
-    with open('../data/sample_output.json', errors='ignore') as f:
+    with open('../data/data.json', errors='ignore') as f:
         for jsonObj in f:
             essayStringList = essayStringList + jsonObj
     jsonEssayObject = json.loads(essayStringList)
