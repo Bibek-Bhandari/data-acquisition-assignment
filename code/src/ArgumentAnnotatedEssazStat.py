@@ -1,10 +1,12 @@
 import json
 import spacy
 import nltk.data
+from collections import Counter
 
 nltk.download('punkt')
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 nlp = spacy.load("en_core_web_sm")
+
 
 
 def getJSonObject():
@@ -158,7 +160,7 @@ print('-' * 100)
 # 5.Average number of tokens in major claims, claims, and premises
 def printAverageNoOfMajorClaimsClaimsPremisesTokens():
     allMajorClaimsTokens = getAllMajorClaimsTokens()
-    allClaimsTokens = getAllMajorClaimsTokens()
+    allClaimsTokens = getAllClaimsTokens()
     allPremisesTokens = getAllPremisesTokens()
     totalMCPTokens = len(allMajorClaimsTokens) + len(allClaimsTokens) + len(allPremisesTokens)
     print("Average number of tokens in major claims, claims, and premises = ", int(totalMCPTokens / 3))
@@ -170,11 +172,24 @@ print('-' * 100)
 
 # The 10 most specific words in major claims, claims, and premises.
 def printSpecificWordsInMajorClaimsClaimsPremises():
-    allMajorClaimsTokens = getAllMajorClaimsTokens()
-    allClaimsTokens = getAllMajorClaimsTokens()
-    allPremisesTokens = getAllPremisesTokens()
-    print("10 most specific words in major claims, claims, and premises =  logic needs to be implemented")
+    allMajorClaimsTokens = removePunctAndStopWords(getAllMajorClaimsTokens())
+    allClaimsTokens = removePunctAndStopWords(getAllClaimsTokens())
+    allPremisesTokens = removePunctAndStopWords(getAllPremisesTokens())
+    for word in allMajorClaimsTokens:
+        if word in allClaimsTokens or word in allPremisesTokens:
+            allMajorClaimsTokens.remove(word)
+    mostSpecificWords = []
+    for word in Counter(allMajorClaimsTokens).most_common(10):
+        mostSpecificWords.append(word[0])
+    print("10 most specific words in major claims, claims, and premises :",mostSpecificWords)
 
 
+def removePunctAndStopWords(list):
+    out = []
+    for word in list:
+        lexeme = nlp.vocab[word]
+        if lexeme.is_stop == False and lexeme.is_punct == False:
+            out.append(word)
+    return out
 printSpecificWordsInMajorClaimsClaimsPremises()
 print('-' * 100)
