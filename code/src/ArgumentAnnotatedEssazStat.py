@@ -175,13 +175,40 @@ def printSpecificWordsInMajorClaimsClaimsPremises():
     allMajorClaimsTokens = removePunctAndStopWords(getAllMajorClaimsTokens())
     allClaimsTokens = removePunctAndStopWords(getAllClaimsTokens())
     allPremisesTokens = removePunctAndStopWords(getAllPremisesTokens())
-    for word in allMajorClaimsTokens:
+
+    # Calculating most specific words for Major Claims
+    allMajorClaimsTokensMod = allMajorClaimsTokens
+    for word in allMajorClaimsTokensMod:
         if word in allClaimsTokens or word in allPremisesTokens:
-            allMajorClaimsTokens.remove(word)
-    mostSpecificWords = []
-    for word in Counter(allMajorClaimsTokens).most_common(10):
-        mostSpecificWords.append(word[0])
-    print("10 most specific words in major claims, claims, and premises :",mostSpecificWords)
+            allMajorClaimsTokensMod.remove(word)
+
+    specificWordsMajorClaims = []
+    for word in Counter(allMajorClaimsTokensMod).most_common(10):
+        specificWordsMajorClaims.append(word[0])
+
+    # Calculating most specific words for Major Claims
+    allClaimsTokensMod = allClaimsTokens
+    for word in allClaimsTokensMod:
+        if word in allMajorClaimsTokens or word in allPremisesTokens:
+            allClaimsTokensMod.remove(word)
+
+    specificWordsClaims = []
+    for word in Counter(allClaimsTokensMod).most_common(10):
+        specificWordsClaims.append(word[0])
+
+    # Calculating most specific words for Major Claims
+    allPremisesTokensMod = allPremisesTokens
+    for word in allPremisesTokensMod:
+        if word in allClaimsTokens or word in allMajorClaimsTokens:
+            allPremisesTokensMod.remove(word)
+
+    specificWordsPremises = []
+    for word in Counter(allPremisesTokensMod).most_common(10):
+        specificWordsPremises.append(word[0])
+
+    print("10 most specific words in major claims:",specificWordsMajorClaims)
+    print("10 most specific words in claims:",specificWordsClaims)
+    print("10 most specific words in premises:",specificWordsPremises)
 
 
 def removePunctAndStopWords(list):
