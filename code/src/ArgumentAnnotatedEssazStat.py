@@ -172,39 +172,51 @@ print('-' * 100)
 
 # The 10 most specific words in major claims, claims, and premises.
 def printSpecificWordsInMajorClaimsClaimsPremises():
-    allMajorClaimsTokens = list(set(removePunctAndStopWords(getAllMajorClaimsTokens())))
-    allClaimsTokens = list(set(removePunctAndStopWords(getAllClaimsTokens())))
-    allPremisesTokens = list(set(removePunctAndStopWords(getAllPremisesTokens())))
+    allMajorClaimsTokens = removePunctAndStopWords(getAllMajorClaimsTokens())
+    allClaimsTokens = removePunctAndStopWords(getAllClaimsTokens())
+    allPremisesTokens = removePunctAndStopWords(getAllPremisesTokens())
+    mt = allMajorClaimsTokens
+    ct = allClaimsTokens
+    pt = allPremisesTokens
 
     # Calculating most specific words for Major Claims
-    allMajorClaimsTokensMod = allMajorClaimsTokens
-    for word in allMajorClaimsTokensMod:
-        if word in allClaimsTokens or word in allPremisesTokens:
-            allMajorClaimsTokensMod.remove(word)
+
+    for item in mt:
+        if item in ct or item in pt:
+            for it in allMajorClaimsTokens:
+                if item == it:
+                    allMajorClaimsTokens.remove(it)
+
 
     specificWordsMajorClaims = []
-    for word1 in Counter(allMajorClaimsTokensMod).most_common(10):
+    for word1 in Counter(allMajorClaimsTokens).most_common(10):
         specificWordsMajorClaims.append(word1[0])
 
-    # Calculating most specific words for Major Claims
-    allClaimsTokensMod = allClaimsTokens
-    for word in allClaimsTokensMod:
-        if word in allMajorClaimsTokens or word in allPremisesTokens:
-            allClaimsTokensMod.remove(word)
+    # Calculating most specific words for  Claims
+    for item in ct:
+        if item in mt or item in pt:
+            for it in allClaimsTokens:
+                if item == it:
+                    allClaimsTokens.remove(it)
 
+    
     specificWordsClaims = []
-    for word1 in Counter(allClaimsTokensMod).most_common(10):
+    for word1 in Counter(allClaimsTokens).most_common(10):
         specificWordsClaims.append(word1[0])
 
     # Calculating most specific words for Major Claims
-    allPremisesTokensMod = allPremisesTokens
-    for word in allPremisesTokensMod:
-        if word in allClaimsTokens or word in allMajorClaimsTokens:
-            allPremisesTokensMod.remove(word)
+    for item in pt:
+        if item in ct or item in mt:
+            for it in allPremisesTokens:
+                if item == it:
+                    allPremisesTokens.remove(it)
 
+
+    
     specificWordsPremises = []
-    for word1 in Counter(allPremisesTokensMod).most_common(10):
+    for word1 in Counter(allPremisesTokens).most_common(10):
         specificWordsPremises.append(word1[0])
+
 
     print("10 most specific words in major claims:",specificWordsMajorClaims)
     print("10 most specific words in claims:",specificWordsClaims)
@@ -216,7 +228,7 @@ def removePunctAndStopWords(list):
     for word in list:
         lexeme = nlp.vocab[word]
         if lexeme.is_stop == False and lexeme.is_punct == False:
-            out.append(word)
+            out.append(word.lower())
     return out
 printSpecificWordsInMajorClaimsClaimsPremises()
 print('-' * 100)
