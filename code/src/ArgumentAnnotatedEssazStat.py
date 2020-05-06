@@ -1,15 +1,17 @@
 import json
 import spacy
 import nltk.data
+from collections import Counter
 
 nltk.download('punkt')
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 nlp = spacy.load("en_core_web_sm")
 
 
+
 def getJSonObject():
     essayStringList = ''
-    with open('../data/sample_output.json', errors='ignore') as f:
+    with open('../data/data.json', errors='ignore') as f:
         for jsonObj in f:
             essayStringList = essayStringList + jsonObj
     jsonEssayObject = json.loads(essayStringList)
@@ -158,7 +160,7 @@ print('-' * 100)
 # 5.Average number of tokens in major claims, claims, and premises
 def printAverageNoOfMajorClaimsClaimsPremisesTokens():
     allMajorClaimsTokens = getAllMajorClaimsTokens()
-    allClaimsTokens = getAllMajorClaimsTokens()
+    allClaimsTokens = getAllClaimsTokens()
     allPremisesTokens = getAllPremisesTokens()
     totalMCPTokens = len(allMajorClaimsTokens) + len(allClaimsTokens) + len(allPremisesTokens)
     print("Average number of tokens in major claims, claims, and premises = ", int(totalMCPTokens / 3))
@@ -170,11 +172,63 @@ print('-' * 100)
 
 # The 10 most specific words in major claims, claims, and premises.
 def printSpecificWordsInMajorClaimsClaimsPremises():
-    allMajorClaimsTokens = getAllMajorClaimsTokens()
-    allClaimsTokens = getAllMajorClaimsTokens()
-    allPremisesTokens = getAllPremisesTokens()
-    print("10 most specific words in major claims, claims, and premises =  logic needs to be implemented")
+    allMajorClaimsTokens = removePunctAndStopWords(getAllMajorClaimsTokens())
+    allClaimsTokens = removePunctAndStopWords(getAllClaimsTokens())
+    allPremisesTokens = removePunctAndStopWords(getAllPremisesTokens())
+    mt = allMajorClaimsTokens
+    ct = allClaimsTokens
+    pt = allPremisesTokens
+
+    # Calculating most specific words for Major Claims
+
+    for item in mt:
+        if item in ct or item in pt:
+            for it in allMajorClaimsTokens:
+                if item == it:
+                    allMajorClaimsTokens.remove(it)
 
 
+    specificWordsMajorClaims = []
+    for word1 in Counter(allMajorClaimsTokens).most_common(10):
+        specificWordsMajorClaims.append(word1[0])
+
+    # Calculating most specific words for  Claims
+    for item in ct:
+        if item in mt or item in pt:
+            for it in allClaimsTokens:
+                if item == it:
+                    allClaimsTokens.remove(it)
+
+    
+    specificWordsClaims = []
+    for word1 in Counter(allClaimsTokens).most_common(10):
+        specificWordsClaims.append(word1[0])
+
+    # Calculating most specific words for Major Claims
+    for item in pt:
+        if item in ct or item in mt:
+            for it in allPremisesTokens:
+                if item == it:
+                    allPremisesTokens.remove(it)
+
+
+    
+    specificWordsPremises = []
+    for word1 in Counter(allPremisesTokens).most_common(10):
+        specificWordsPremises.append(word1[0])
+
+
+    print("10 most specific words in major claims:",specificWordsMajorClaims)
+    print("10 most specific words in claims:",specificWordsClaims)
+    print("10 most specific words in premises:",specificWordsPremises)
+
+
+def removePunctAndStopWords(list):
+    out = []
+    for word in list:
+        lexeme = nlp.vocab[word]
+        if lexeme.is_stop == False and lexeme.is_punct == False:
+            out.append(word.lower())
+    return out
 printSpecificWordsInMajorClaimsClaimsPremises()
 print('-' * 100)
